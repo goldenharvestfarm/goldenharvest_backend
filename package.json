@@ -1,0 +1,33 @@
+{
+  "name": "golden-harvest-farm",
+  "version": "1.0.0",
+  "description": "Golden Harvest Farm - Admin-managed livestock marketplace for quality chickens and goats",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "curl http://localhost:3000/api/seed"
+  },
+  "keywords": [
+    "livestock",
+    "farm",
+    "marketplace",
+    "chicken",
+    "goat",
+    "rwanda",
+    "agriculture"
+  ],
+  "author": "Golden Harvest Farm",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
