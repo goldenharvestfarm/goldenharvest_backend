@@ -16,12 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/golden_harvest_farm', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB Atlas'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+
 
 // Listing Schema (Admin only creates listings)
 const listingSchema = new mongoose.Schema({
