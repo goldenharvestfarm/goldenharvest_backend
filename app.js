@@ -250,13 +250,14 @@ app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
 
 // Serve main site
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 // Serve admin dashboard
 app.get('/admin/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
+    res.sendFile(path.join(__dirname, 'frontend', 'admin.html'));
 });
+
 
 // ==================== SEED DATA (FOR TESTING) ====================
 
