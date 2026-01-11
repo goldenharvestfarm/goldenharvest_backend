@@ -28,6 +28,7 @@ const listingSchema = new mongoose.Schema({
     breed: { type: String, required: true },
     quantity: { type: Number, required: true },
     pricePerUnit: { type: Number, required: true },
+    weightPerChicken: { type: Number, required: true }, // ← NEW
     description: { type: String, required: true },
     image: { type: String, required: true },
     healthStatus: { type: String, required: true },
@@ -139,6 +140,7 @@ app.post('/api/admin/listings', authenticateAdmin, async (req, res) => {
             breed: req.body.breed,
             quantity: req.body.quantity,
             pricePerUnit: req.body.pricePerUnit,
+            weightPerChicken: req.body.weightPerChicken, // ← NEW
             description: req.body.description,
             image: req.body.image,
             healthStatus: req.body.healthStatus,
@@ -146,9 +148,9 @@ app.post('/api/admin/listings', authenticateAdmin, async (req, res) => {
             contactMethod: req.body.contactMethod || 'Phone',
             phone: req.body.phone
         });
-        
+
         await listing.save();
-        
+
         res.status(201).json({
             message: 'Listing created successfully',
             listing
@@ -158,6 +160,7 @@ app.post('/api/admin/listings', authenticateAdmin, async (req, res) => {
         res.status(500).json({ message: 'Server error creating listing' });
     }
 });
+
 
 // Admin: Update listing
 app.put('/api/admin/listings/:id', authenticateAdmin, async (req, res) => {
