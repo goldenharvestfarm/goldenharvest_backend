@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,14 +7,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Admin password (in production, use environment variables)
-const ADMIN_PASSWORD = 'goldenharvest123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -53,18 +54,34 @@ const contactSchema = new mongoose.Schema({
 });
 
 const Contact = mongoose.model('Contact', contactSchema);
-
 // Admin Authentication Middleware
 const authenticateAdmin = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    if (!token || token !== ADMIN_PASSWORD) {
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer <password>
+
+    if (!token) {
+        return res.status(401).json({ message: 'Authorization header missing' });
+    }
+
+    if (token !== ADMIN_PASSWORD) {
         return res.status(403).json({ message: 'Admin access required' });
     }
-    
+
+    // Password matches
     next();
 };
+
+module.exports = authenticateAdmin;
+
+
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password === process.env.ADMIN_PASSWORD) {
+        res.json({ token: password }); // sends password back as the "token"
+    } else {
+        res.status(401).json({ message: 'Invalid password' });
+    }
+});
 
 // ==================== PUBLIC ROUTES ====================
 
@@ -375,5 +392,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
     console.log(`📊 API available at http://localhost:${PORT}/api`);
-    console.log(`🌱 MongoDB connected to: mongodb://localhost:27017/golden_harvest_farm`);
+    // console.log(`🌱 MongoDB connected to: mongodb://localhost:27017/golden_harvest_farm`);
 });
